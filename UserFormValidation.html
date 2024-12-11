@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Form Validation</title>
+    <style>
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #ece9e6, #ffffff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* Form Heading */
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Form Group */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #4caf50;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.1);
+            outline: none;
+        }
+
+        /* Buttons Styling */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background-color: #45a049;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-reset {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background-color: #e53935;
+            box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #f44336;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <form id="registrationForm">
+            <h2>Register Now</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                <small class="error-message" id="usernameError"></small>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <small class="error-message" id="emailError"></small>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <small class="error-message" id="passwordError"></small>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+                <small class="error-message" id="phoneError"></small>
+            </div>
+            <div class="form-group">
+                <label for="state">State:</label>
+                <select id="state" name="state" required>
+                    <option value="">Select your state</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Gujarat">Gujarat</option>
+                </select>
+                <small class="error-message" id="stateError"></small>
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <select id="city" name="city" required>
+                    <option value="">Select your city</option>
+                </select>
+                <small class="error-message" id="cityError"></small>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Submit</button>
+                <button type="reset" class="btn-reset">Reset</button>
+            </div>
+        </form>
+    </div>
+
+
+    <script>
+        const stateCityMap = {
+            "Delhi": ["New Delhi", "Old Delhi"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli"],
+            "Karnataka": ["Bangalore", "Mysore", "Mangalore", "Hubli"],
+            "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra"],
+            "West Bengal": ["Kolkata", "Asansol", "Howrah", "Darjeeling", "Siliguri"],
+            "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
+            "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"]
+        };
+
+        document.getElementById('state').addEventListener('change', function () {
+            const cities = stateCityMap[this.value] || [];
+            const citySelect = document.getElementById('city');
+            citySelect.innerHTML = '<option value="">Select your city</option>';
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        });
+
+        document.getElementById('registrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            document.querySelectorAll('.error-message').forEach(msg => msg.style.display = 'none');
+
+            let isValid = true;
+
+            // Username validation: only alphabets and spaces
+            const username = document.getElementById('username').value.trim();
+            const usernamePattern = /^[A-Za-z\s]+$/;
+            if (!usernamePattern.test(username)) {
+                showError('usernameError', 'Username must contain only letters and spaces.');
+                isValid = false;
+            }
+
+            // Email validation: standard email pattern
+            const email = document.getElementById('email').value.trim();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                showError('emailError', 'Please enter a valid email address.');
+                isValid = false;
+            }
+
+            // Password validation: no restrictions
+            const password = document.getElementById('password').value.trim();
+            if (password.length < 6) {
+                showError('passwordError', 'Password must be at least 6 characters long.');
+                isValid = false;
+            }
+
+            // // Phone number validation: only digits
+            const phone = document.getElementById('phone').value.trim();
+
+            // Check if the phone number contains only digits
+            if (!/^[0-9]+$/.test(phone)) {
+                showError('phoneError', 'Phone number must contain only digits.');
+                isValid = false;
+            }
+            // Check if the phone number is exactly 10 digits long
+            else if (phone.length !== 10) {
+                showError('phoneError', 'Phone number must be exactly 10 digits.');
+                isValid = false;
+            }
+
+
+            // State validation: not empty
+            const state = document.getElementById('state').value;
+            if (!state) {
+                showError('stateError', 'Please select your state.');
+                isValid = false;
+            }
+
+            // City validation: not empty
+            const city = document.getElementById('city').value;
+            if (!city) {
+                showError('cityError', 'Please select your city.');
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert('Form submitted successfully!');
+                this.reset();
+                document.getElementById('city').innerHTML = '<option value="">Select your city</option>';
+            }
+        });
+
+        document.getElementById('registrationForm').addEventListener('reset', function () {
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.style.display = 'none';
+                msg.textContent = '';
+            });
+
+            document.getElementById('city').innerHTML = '<option value="">Select your city</option>';
+        });
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    </script>
+
+
+</body>
+
+</html>

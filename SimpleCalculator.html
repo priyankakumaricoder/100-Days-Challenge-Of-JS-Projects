@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #bbbbeb; /* Light lavender background */
+        }
+
+        .calculator {
+            background: #fdfdfe; /* Very light grey */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            padding: 20px;
+        }
+
+        .display {
+            width: 100%;
+            height: 50px;
+            margin-bottom: 10px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            text-align: right;
+            font-size: 1.5em;
+            padding: 5px;
+            background-color: #fefefe; /* White background */
+            color: #333; /* Dark grey text */
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            height: 50px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #6a5acd; /* Slate blue */
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #483d8b; /* Darker slate blue */
+        }
+
+        button.clear {
+            background-color: #ff6347; /* Tomato red */
+        }
+
+        button.clear:hover {
+            background-color: #cd5c5c; /* Indian red */
+        }
+
+        button.equals {
+            background-color: #32cd32; /* Lime green */
+            grid-column: span 3;
+        }
+
+        button.equals:hover {
+            background-color: #228b22; /* Forest green */
+        }
+
+        button.history {
+            background-color: #ffb703; /* Bright yellow */
+            color: black;
+        }
+
+        button.history:hover {
+            background-color: #ffa500; /* Darker yellow */
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" class="display" disabled />
+        <div class="buttons">
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button onclick="appendOperator('/')">/</button>
+
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button onclick="appendOperator('*')">*</button>
+
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button onclick="appendOperator('-')">-</button>
+
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendDot('.')">.</button>
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="appendOperator('+')">+</button>
+
+            <button class="equals" onclick="calculateResult()">=</button>
+            <button class="history" onclick="showHistory()">H</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+        const history = [];
+        let historyIndex = 0;
+
+        function appendNumber(number) {
+            display.value += number;
+        }
+
+        function appendOperator(operator) {
+            if (!isNaN(display.value.slice(-1))) {
+                display.value += operator;
+            }
+        }
+
+        function appendDot() {
+            if (!display.value.includes('.') || /[-+*/]/.test(display.value.slice(-1))) {
+                display.value += '.';
+            }
+        }
+
+        function clearDisplay() {
+            display.value = '';
+        }
+
+        function calculateResult() {
+            try {
+                const result = eval(display.value);
+                history.push(`${display.value} = ${result}`);
+                historyIndex = history.length;
+                display.value = result;
+            } catch (e) {
+                display.value = 'Error';
+            }
+        }
+
+        function showHistory() {
+            if (history.length > 0 && historyIndex > 0) {
+                historyIndex--;
+                display.value = history[historyIndex];
+            } else if (historyIndex === 0) {
+                alert('No more history to display.');
+            }
+        }
+    </script>
+</body>
+</html>

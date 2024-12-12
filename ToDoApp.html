@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <style>
+        body {
+            margin: 0;
+            min-width: 250px;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            cursor: pointer;
+            position: relative;
+            padding: 12px 8px 12px 40px;
+            list-style-type: none;
+            background: #ffffff;
+            font-size: 18px;
+            transition: 0.2s;
+            border-radius: 5px;
+            margin-bottom: 5px;
+
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        ul li:nth-child(odd) {
+            background: #f4f4f4;
+        }
+
+        ul li:hover {
+            background: #ddd;
+        }
+
+        ul li.checked {
+            background: #6c757d;
+            color: #ffffff;
+            text-decoration: line-through;
+        }
+
+        ul li.checked::before {
+            content: '';
+            position: absolute;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 0 2px 2px 0;
+            top: 10px;
+            left: 16px;
+            transform: rotate(45deg);
+            height: 15px;
+            width: 7px;
+        }
+
+        .close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 12px 16px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            background-color: #ff4d4d;
+            color: white;
+        }
+
+        .header {
+            background-color: #1d1f1d;
+            padding: 20px 40px;
+            color: white;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .task-input {
+            margin: 0;
+            border: none;
+            border-radius: 5px;
+            width: 75%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .add-btn {
+            padding: 10px;
+            width: 20%;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background-color: #555;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h2 style="margin:5px">TO-DO APP</h2>
+            <input type="text" id="taskInput" class="task-input" placeholder="Add a new task...">
+            <span onclick="addTask()" class="add-btn">Add</span>
+        </div>
+
+        <ul id="taskList">
+        </ul>
+    </div>
+
+    <script>
+        var close = document.getElementsByClassName("close");
+
+        function addTask() {
+            var li = document.createElement("li");
+            var inputValue = document.getElementById("taskInput").value;
+            var t = document.createTextNode(inputValue);
+            li.appendChild(t);
+            if (inputValue === '') {
+                alert("You must write something!");
+            } else {
+                document.getElementById("taskList").appendChild(li);
+            }
+            document.getElementById("taskInput").value = "";
+
+            var span = document.createElement("SPAN");
+            var txt = document.createTextNode("\u00D7");
+            span.className = "close";
+            span.appendChild(txt);
+            li.appendChild(span);
+
+            for (let i = 0; i < close.length; i++) {
+                close[i].onclick = function () {
+                    var div = this.parentElement;
+                    div.style.display = "none";
+                }
+            }
+        }
+
+        var list = document.querySelector('ul');
+        list.addEventListener('click', function (ev) {
+            if (ev.target.tagName === 'LI') {
+                ev.target.classList.toggle('checked');
+            }
+        }, false);
+    </script>
+
+</body>
+
+</html>

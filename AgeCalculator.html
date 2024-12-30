@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #72c6e8, #004d8c);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: translateY(-10px);
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        input[type="date"] {
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 25px;
+            transition: border 0.3s ease;
+        }
+
+        input[type="date"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        p {
+            font-size: 18px;
+            font-weight: 400;
+            color: #333;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        #nextBirthday {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .button-container button {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .button-container button i {
+            margin-right: 8px;
+        }
+
+        .calculate-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .calculate-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .reset-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Age Calculator</h1>
+        <label for="dob">Select your Date of Birth:</label>
+        <input type="date" id="dob">
+        <p id="result">Your age will appear here.</p>
+        <p id="nextBirthday">Your next birthday is in:</p>
+
+        <div class="button-container">
+            <button class="calculate-btn" onclick="calculateAge()">
+                <i class="fas fa-calculator"></i> Calculate
+            </button>
+            <button class="reset-btn" onclick="resetForm()">
+                <i class="fas fa-redo"></i> Reset
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function calculateAge() {
+            const dob = document.getElementById("dob").value;
+            if (!dob) return; // Exit if no date is selected
+
+            const birthDate = new Date(dob);
+            const today = new Date();
+
+            let ageYears = today.getFullYear() - birthDate.getFullYear();
+            let ageMonths = today.getMonth() - birthDate.getMonth();
+            let ageDays = today.getDate() - birthDate.getDate();
+
+            // Adjust for negative month or day differences
+            if (ageDays < 0) {
+                ageMonths--;
+                ageDays += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); // Get the last day of the previous month
+            }
+
+            if (ageMonths < 0) {
+                ageYears--;
+                ageMonths += 12;
+            }
+
+            // Display the result for age
+            const resultElement = document.getElementById("result");
+            resultElement.textContent = `You are ${ageYears} years, ${ageMonths} months, and ${ageDays} days old.`;
+
+            // Calculate next birthday
+            const nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+            if (nextBirthday < today) {
+                nextBirthday.setFullYear(today.getFullYear() + 1); // Set next birthday to next year if already passed this year
+            }
+
+            // Calculate difference to next birthday
+            const timeDiff = nextBirthday - today;
+            const daysToNextBirthday = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const monthsToNextBirthday = nextBirthday.getMonth() - today.getMonth() + (nextBirthday.getFullYear() - today.getFullYear()) * 12;
+
+            // Display days and months to next birthday
+            const nextBirthdayElement = document.getElementById("nextBirthday");
+            nextBirthdayElement.textContent = `Your next birthday is in ${monthsToNextBirthday} months and ${daysToNextBirthday} days.`;
+        }
+
+        function resetForm() {
+            // Reset the input field and the result
+            document.getElementById("dob").value = "";
+            document.getElementById("result").textContent = "";
+            document.getElementById("nextBirthday").textContent = "";
+        }
+    </script>
+</body>
+</html>

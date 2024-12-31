@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"> 
+    <style>
+        *,
+        *:before,
+        *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #e0e0e0, #6e7dff);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            width: 60%;
+            max-width: 700px;
+            background-color: #ffffff;
+            padding: 40px 30px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 15px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .scores {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .scores span {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e88e5;
+        }
+
+        .weapons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .weapons button {
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            font-size: 40px;
+            height: 100px;
+            width: 100px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .weapons button:hover {
+            transform: scale(1.1);
+        }
+
+        .weapons img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .details {
+            margin-top: 30px;
+        }
+
+        #result {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+
+        #result.win {
+            color: green;
+        }
+
+        #result.lose {
+            color: red;
+        }
+
+        #result.draw {
+            color: gray;
+        }
+
+        #user_choice,
+        #computer_choice {
+            margin: 10px 0;
+            font-weight: 600;
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .control-buttons button {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 0 10px;
+        }
+
+        .control-buttons button:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="scores">
+            <p>Computer: <span id="computer_score">0</span></p>
+            <p>You: <span id="user_score">0</span></p>
+        </div>
+        
+        <div class="weapons">
+            <button onclick="checker('rock')">
+                <img src="https://img.icons8.com/ios/452/rock.png" alt="Rock">
+            </button>
+            <button onclick="checker('paper')">
+                <img src="https://img.icons8.com/ios/452/paper.png" alt="Paper">
+            </button>
+            <button onclick="checker('scissor')">
+                <img src="https://img.icons8.com/ios/452/scissors.png" alt="Scissors">
+            </button>
+        </div>
+
+        <div class="details">
+            <p id="user_choice"></p>
+            <p id="comp_choice"></p>
+            <p id="result"></p>
+        </div>
+
+        <!-- Control Buttons for Start and Reset -->
+        <div class="control-buttons">
+            <button onclick="startGame()">Start</button>
+            <button onclick="resetGame()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let [computer_score, user_score] = [0, 0];
+        let result_ref = document.getElementById("result");
+        let choices_object = {
+            'rock': {
+                'rock': 'draw',
+                'scissor': 'win',
+                'paper': 'lose'
+            },
+            'scissor': {
+                'rock': 'lose',
+                'scissor': 'draw',
+                'paper': 'win'
+            },
+            'paper': {
+                'rock': 'win',
+                'scissor': 'lose',
+                'paper': 'draw'
+            }
+        };
+
+        function checker(input) {
+            var choices = ["rock", "paper", "scissor"];
+            var num = Math.floor(Math.random() * 3);
+
+            document.getElementById("comp_choice").innerHTML =
+                `Computer chose <span>${choices[num].toUpperCase()}</span>`;
+
+            document.getElementById("user_choice").innerHTML =
+                `You chose <span>${input.toUpperCase()}</span>`;
+
+            let computer_choice = choices[num];
+
+            switch (choices_object[input][computer_choice]) {
+                case 'win':
+                    result_ref.className = "win";
+                    result_ref.innerHTML = "YOU WIN!";
+                    user_score++;
+                    break;
+                case 'lose':
+                    result_ref.className = "lose";
+                    result_ref.innerHTML = "YOU LOSE!";
+                    computer_score++;
+                    break;
+                default:
+                    result_ref.className = "draw";
+                    result_ref.innerHTML = "DRAW!";
+                    break;
+            }
+
+            document.getElementById("computer_score").innerHTML = computer_score;
+            document.getElementById("user_score").innerHTML = user_score;
+        }
+
+        function startGame() {
+            // Enable the weapons buttons
+            let buttons = document.querySelectorAll('.weapons button');
+            buttons.forEach(button => {
+                button.disabled = false;
+            });
+
+            // Clear any previous results and scores
+            result_ref.innerHTML = "";
+            document.getElementById("user_choice").innerHTML = "";
+            document.getElementById("comp_choice").innerHTML = "";
+            document.getElementById("computer_score").innerHTML = "0";
+            document.getElementById("user_score").innerHTML = "0";
+        }
+
+        function resetGame() {
+            // Disable the weapons buttons
+            let buttons = document.querySelectorAll('.weapons button');
+            buttons.forEach(button => {
+                button.disabled = true;
+            });
+
+            // Reset the scores and result
+            computer_score = 0;
+            user_score = 0;
+            result_ref.innerHTML = "";
+            document.getElementById("user_choice").innerHTML = "";
+            document.getElementById("comp_choice").innerHTML = "";
+            document.getElementById("computer_score").innerHTML = "0";
+            document.getElementById("user_score").innerHTML = "0";
+        }
+
+        // Initially disable buttons until "Start" is clicked
+        document.querySelectorAll('.weapons button').forEach(button => {
+            button.disabled = true;
+        });
+    </script>
+</body>
+
+</html>

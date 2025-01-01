@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Image Gallery</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f3f4f6, #e8eaed);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .gallery-container {
+            width: 322px;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 15px 15px 10px;
+            /* Reduced padding to decrease height */
+            margin: 20px 10px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 15px;
+            /* Slightly reduced bottom margin */
+        }
+
+        .main-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .thumbnail-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            /* Reduced gap between thumbnails */
+            flex-wrap: wrap;
+            margin-top: 10px;
+            /* Reduced top margin */
+            padding: 5px 5px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .thumbnail {
+            width: 50px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.1);
+            border-color: #007bff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .thumbnail.active {
+            border-color: #007bff;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
+        @media (max-width: 768px) {
+            .gallery-container {
+                width: 95%;
+                margin: 10px;
+            }
+
+            .thumbnail {
+                width: 65px;
+                height: 65px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="gallery-container">
+        <h1>Denim Jacket Gallery</h1>
+        <img id="mainImage" src="denim-front.jpg" alt="Denim Jacket Front View" class="main-image">
+        <div class="thumbnail-container">
+            <img src="denim-front.jpg" alt="Front View" class="thumbnail active" onclick="changeImage(this)">
+            <img src="demin-neck.jpg" alt="Neck View" class="thumbnail" onclick="changeImage(this)">
+            <img src="demin-chest.webp" alt="Chest View" class="thumbnail" onclick="changeImage(this)">
+            <img src="denim-sleeve.jpg" alt="Sleeve View" class="thumbnail" onclick="changeImage(this)">
+            <img src="denim-back.webp" alt="Back View" class="thumbnail" onclick="changeImage(this)">
+        </div>
+    </div>
+
+    <script>
+        function changeImage(thumbnail) {
+            // Get the main image element
+            const mainImage = document.getElementById('mainImage');
+
+            // Update the source of the main image
+            mainImage.src = thumbnail.src;
+
+            // Remove active class from all thumbnails
+            document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+
+            // Add active class to the clicked thumbnail
+            thumbnail.classList.add('active');
+        }
+    </script>
+
+</body>
+
+</html>
